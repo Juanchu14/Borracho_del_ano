@@ -451,8 +451,8 @@ function renderRankingPanel() {
         <td class="col-sticky">
           <div class="player-cell">
             <span class="rank-pos ${idx === 0 ? 'is-first' : ''}">#${idx + 1}</span>
-            <div class="mini-avatar">${initials(row.full_name)}</div>
-            <div>${escapeHtml(row.full_name)}</div>
+            <div class="mini-avatar">${initials(row.username)}</div>
+            <div>${escapeHtml(row.username)}</div>
           </div>
         </td>
         <td><span class="points-pill">${row.total_points}</span></td>
@@ -496,7 +496,7 @@ function buildEntriesTableHtml(entries, { showPlayer = true } = {}) {
   const rows = entries.map((e) => {
     const canEdit = e.user.id === state.user.id || state.currentLeague.is_admin;
     return `<tr data-entry-id="${e.id}">
-      ${showPlayer ? `<td class="col-sticky"><div class="player-cell"><div class="mini-avatar">${initials(e.user.full_name)}</div>${escapeHtml(e.user.full_name)}</div></td>` : ''}
+      ${showPlayer ? `<td class="col-sticky"><div class="player-cell"><div class="mini-avatar">${initials(e.user.username)}</div>${escapeHtml(e.user.username)}</div></td>` : ''}
       <td>${e.scoring_item.emoji} ${escapeHtml(e.scoring_item.name)}</td>
       <td class="item-qty-cell">${e.quantity}</td>
       <td class="date-cell">${formatDate(e.created_at)}</td>
@@ -523,7 +523,7 @@ function wireEntriesTableActions(container, entries, onChanged) {
     btn.addEventListener('click', async () => {
       const tr = btn.closest('tr');
       const entry = entries.find((e) => e.id === Number(tr.dataset.entryId));
-      if (!window.confirm(`¿Eliminar "${entry.scoring_item.name}" de ${entry.user.full_name}?`)) return;
+      if (!window.confirm(`¿Eliminar "${entry.scoring_item.name}" de ${entry.user.username}?`)) return;
       try {
         await Api.deleteEntry(state.currentLeague.id, entry.id);
         toast('Registro eliminado.', 'success');
@@ -564,7 +564,7 @@ function openMemberHistoryModal() {
 
   Api.getMembers(state.currentLeague.id).then((m) => {
     members = m;
-    select.innerHTML = members.map((mem) => `<option value="${mem.id}">${escapeHtml(mem.full_name)} (@${escapeHtml(mem.username)})</option>`).join('');
+    select.innerHTML = members.map((mem) => `<option value="${mem.id}">${escapeHtml(mem.username)}</option>`).join('');
     const defaultId = members.some((m2) => m2.id === state.user.id) ? state.user.id : members[0].id;
     select.value = defaultId;
     loadFor(defaultId);
