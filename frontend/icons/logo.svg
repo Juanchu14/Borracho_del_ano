@@ -1,0 +1,20 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cupFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F0C172"/>
+      <stop offset="100%" stop-color="#E8A33D"/>
+    </linearGradient>
+  </defs>
+  <!-- asas -->
+  <path d="M30 34 C14 34 10 50 18 60 C23 66 30 67 35 64" fill="none" stroke="#C1502E" stroke-width="6" stroke-linecap="round"/>
+  <path d="M90 34 C106 34 110 50 102 60 C97 66 90 67 85 64" fill="none" stroke="#C1502E" stroke-width="6" stroke-linecap="round"/>
+  <!-- cuerpo de la copa -->
+  <path d="M32 30 H88 L80 70 C77 84 63 92 60 92 C57 92 43 84 40 70 Z" fill="url(#cupFill)" stroke="#7A3A1E" stroke-width="3"/>
+  <!-- brillo en la espuma -->
+  <path d="M40 36 H80" stroke="#FCEBC9" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <!-- pie -->
+  <rect x="54" y="92" width="12" height="10" fill="#C1502E"/>
+  <path d="M40 106 H80 L74 114 H46 Z" fill="#C1502E"/>
+  <!-- estrella -->
+  <path d="M60 6 L64 16 L75 16 L66 23 L69 34 L60 27 L51 34 L54 23 L45 16 L56 16 Z" fill="#F0C172"/>
+</svg>

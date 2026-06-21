@@ -1,0 +1,16 @@
+[Unit]
+Description=Borracho del año (app de ranking de consumo responsable)
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+# Cambia "tu_usuario" por el usuario del sistema con el que quieras ejecutar la app
+User=tu_usuario
+WorkingDirectory=/ruta/a/borracho-del-ano/backend
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=/ruta/a/borracho-del-ano/backend/.env
+
+[Install]
+WantedBy=multi-user.target

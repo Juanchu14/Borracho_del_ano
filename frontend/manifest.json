@@ -1,0 +1,17 @@
+{
+  "name": "Borracho del año",
+  "short_name": "Borracho del año",
+  "description": "Ranking competitivo de consumo responsable entre amigos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1B140F",
+  "theme_color": "#1B140F",
+  "icons": [
+    {
+      "src": "/icons/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

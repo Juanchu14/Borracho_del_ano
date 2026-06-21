@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Borracho del año</title>
+<meta name="description" content="Ranking competitivo de consumo responsable entre amigos" />
+<meta name="theme-color" content="#1B140F" />
+<link rel="manifest" href="/manifest.json" />
+<link rel="icon" href="/icons/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/icons/logo.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="app-shell">
+
+  <!-- ============ VISTA: AUTENTICACIÓN ============ -->
+  <main id="view-auth" class="screen">
+    <div class="auth-hero">
+      <img src="/icons/logo.svg" alt="" />
+      <h1>Borracho del año</h1>
+      <p class="tagline">Vuestro ranking de quedadas. Consumo responsable, competición seria.</p>
+
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button type="button" id="tab-login" class="active">Entrar</button>
+          <button type="button" id="tab-register">Crear cuenta</button>
+        </div>
+
+        <div id="auth-error" class="form-error hidden"></div>
+
+        <form id="form-login">
+          <div class="field">
+            <label for="login-username">Usuario</label>
+            <input id="login-username" name="username" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="login-password">Contraseña</label>
+            <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+
+        <form id="form-register" class="hidden">
+          <div class="field">
+            <label for="reg-fullname">Nombre completo</label>
+            <input id="reg-fullname" name="full_name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="reg-username">Nombre de usuario</label>
+            <input id="reg-username" name="username" autocomplete="username" required />
+            <p class="field-hint">3-30 caracteres: letras, números o "_".</p>
+          </div>
+          <div class="field">
+            <label for="reg-password">Contraseña</label>
+            <input id="reg-password" name="password" type="password" autocomplete="new-password" required />
+            <p class="field-hint">Mínimo 6 caracteres.</p>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ VISTA: DASHBOARD (MIS LIGAS) ============ -->
+  <main id="view-dashboard" class="screen hidden">
+    <div class="topbar">
+      <div>
+        <span class="eyebrow">Borracho del año</span>
+        <h1>Tus ligas</h1>
+      </div>
+      <button type="button" class="icon-btn" id="btn-logout" title="Cerrar sesión">⏻</button>
+    </div>
+    <div class="scroll-area">
+
+      <div class="section-title">Tu cuenta</div>
+      <div class="user-row">
+        <div class="avatar" id="dash-avatar">?</div>
+        <div class="who">
+          <div class="name" id="dash-fullname">—</div>
+          <div class="username" id="dash-username">@—</div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-edit-username">Editar</button>
+      </div>
+
+      <div class="section-title">Tus ligas</div>
+      <div id="leagues-list"></div>
+
+      <div class="dashboard-actions">
+        <button type="button" class="btn btn-primary" id="btn-open-create-league">+ Crear liga</button>
+        <button type="button" class="btn btn-secondary" id="btn-open-join-league">Unirse</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ VISTA: LIGA ============ -->
+  <main id="view-league" class="screen hidden">
+    <div class="topbar">
+      <button type="button" class="icon-btn" id="btn-back-dashboard" title="Volver">←</button>
+      <div>
+        <span class="eyebrow">Liga</span>
+        <h1 id="league-name">—</h1>
+      </div>
+      <button type="button" class="icon-btn hidden" id="btn-league-admin" title="Editar liga">⚙</button>
+    </div>
+
+    <div class="scroll-area">
+      <div class="league-header">
+        <p class="desc" id="league-desc"></p>
+
+        <div class="invite-ticket">
+          <div class="stub">🎟️</div>
+          <div class="main">
+            <div class="label">Código de invitación</div>
+            <div class="code-row">
+              <span class="code" id="league-invite-code">----</span>
+              <button type="button" class="copy-btn" id="btn-copy-code">Copiar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="league-toolbar">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-open-scoring">🏷️ Puntuación</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-open-member-history">👤 Historial de alguien</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button type="button" id="tab-ranking" class="active">Clasificación</button>
+        <button type="button" id="tab-history">Historial</button>
+      </div>
+
+      <div id="panel-ranking"></div>
+      <div id="panel-history" class="hidden"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button type="button" class="btn btn-primary btn-block" id="btn-add-score">🍻 Añadir puntuación</button>
+    </div>
+  </main>
+
+</div>
+
+<!-- ============ MODALES ============ -->
+
+<div id="modal-root"></div>
+
+<!-- Plantillas de modales (se clonan/usan vía JS) -->
+
+<template id="tpl-modal-create-league">
+  <div class="modal-overlay" data-modal="create-league">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2>Crear liga</h2><button class="modal-close" data-close>✕</button></div>
+      <div id="modal-create-league-error" class="form-error hidden"></div>
+      <form id="form-create-league">
+        <div class="field">
+          <label for="create-league-name">Nombre de la liga</label>
+          <input id="create-league-name" required maxlength="100" placeholder="Liga de los viernes" />
+        </div>
+        <div class="field">
+          <label for="create-league-desc">Descripción (opcional)</label>
+          <textarea id="create-league-desc" maxlength="500" placeholder="Solo para valientes…"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Crear liga</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-modal-join-league">
+  <div class="modal-overlay" data-modal="join-league">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2>Unirse a una liga</h2><button class="modal-close" data-close>✕</button></div>
+      <div id="modal-join-league-error" class="form-error hidden"></div>
+      <form id="form-join-league">
+        <div class="field">
+          <label for="join-league-code">Código de invitación</label>
+          <input id="join-league-code" required maxlength="20" placeholder="XXXX-XXXX" style="font-family:var(--font-mono); text-transform:uppercase;" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Unirme</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-modal-edit-username">
+  <div class="modal-overlay" data-modal="edit-username">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2>Cambiar nombre de usuario</h2><button class="modal-close" data-close>✕</button></div>
+      <div id="modal-edit-username-error" class="form-error hidden"></div>
+      <form id="form-edit-username">
+        <div class="field">
+          <label for="edit-username-input">Nuevo nombre de usuario</label>
+          <input id="edit-username-input" required maxlength="30" />
+          <p class="field-hint">3-30 caracteres: letras, números o "_".</p>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-modal-edit-league">
+  <div class="modal-overlay" data-modal="edit-league">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2>Ajustes de la liga</h2><button class="modal-close" data-close>✕</button></div>
+      <div id="modal-edit-league-error" class="form-error hidden"></div>
+      <form id="form-edit-league">
+        <div class="field">
+          <label for="edit-league-name">Nombre de la liga</label>
+          <input id="edit-league-name" required maxlength="100" />
+        </div>
+        <div class="field">
+          <label for="edit-league-desc">Descripción (opcional)</label>
+          <textarea id="edit-league-desc" maxlength="500"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-modal-scoring">
+  <div class="modal-overlay" data-modal="scoring">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2>Sistema de puntuación</h2><button class="modal-close" data-close>✕</button></div>
+      <div id="modal-scoring-error" class="form-error hidden"></div>
+
+      <div id="scoring-admin-form-wrap" class="hidden">
+        <form id="form-add-scoring">
+          <div class="field" style="display:flex; gap:8px;">
+            <div style="flex:2;">
+              <label for="scoring-name">Nombre</label>
+              <input id="scoring-name" required maxlength="60" placeholder="Cerveza" />
+            </div>
+            <div style="flex:1;">
+              <label for="scoring-emoji">Emoji</label>
+              <input id="scoring-emoji" required maxlength="10" placeholder="🍺" />
+            </div>
+            <div style="flex:1;">
+              <label for="scoring-points">Puntos</label>
+              <input id="scoring-points" required type="number" step="1" placeholder="1" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary btn-block" id="scoring-submit-btn">+ Añadir elemento</button>
+        </form>
+      </div>
+
+      <div id="scoring-list" class="scoring-list"></div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-modal-add-score">
+  <div class="modal-overlay" data-modal="add-score">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2 id="add-score-title">Añadir puntuación</h2><button class="modal-close" data-close>✕</button></div>
+      <div id="modal-add-score-error" class="form-error hidden"></div>
+      <form id="form-add-score">
+        <div class="field">
+          <label for="add-score-item">Elemento</label>
+          <select id="add-score-item" required></select>
+        </div>
+        <div class="field">
+          <label>Cantidad</label>
+          <div class="qty-stepper">
+            <button type="button" id="qty-minus">−</button>
+            <input id="add-score-qty" type="number" min="1" value="1" inputmode="numeric" />
+            <button type="button" id="qty-plus">+</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="add-score-submit">Añadir</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-modal-member-history">
+  <div class="modal-overlay" data-modal="member-history">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-head"><h2>Historial de un integrante</h2><button class="modal-close" data-close>✕</button></div>
+      <div class="member-select-row">
+        <select id="member-history-select"></select>
+      </div>
+      <div id="member-history-content"></div>
+    </div>
+  </div>
+</template>
+
+<script src="/js/api.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
